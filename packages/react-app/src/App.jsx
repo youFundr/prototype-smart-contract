@@ -15,6 +15,7 @@ import "./App.css";
 import {
   Account,
   Contract,
+  Events,
   Faucet,
   GasGauge,
   Header,
@@ -311,6 +312,14 @@ function App(props) {
         <Route exact path="/">
           {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
           <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
+          <Events
+            contracts={readContracts}
+            contractName="Youfundr"
+            eventName="fundStarted"
+            localProvider={localProvider}
+            mainnetProvider={mainnetProvider}
+            startBlock={1}
+          />
         </Route>
         <Route exact path="/debug">
           {/*
@@ -320,7 +329,7 @@ function App(props) {
             */}
 
           <Contract
-            name="YourContract"
+            name="Youfundr"
             price={price}
             signer={userSigner}
             provider={localProvider}
