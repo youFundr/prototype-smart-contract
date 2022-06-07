@@ -17,7 +17,7 @@ contract Youfundr {
         uint256 deadline,
         uint256 goal,
         uint256 currentAmount,
-        function() external view returns (Project.State) state,
+        Project.State state,
         bool donator
     );
 
@@ -45,7 +45,7 @@ contract Youfundr {
             deadlineTime,
             amountNeeded,
             0,
-            newProject.state,
+            newProject.state(),
             false
         );
     }
@@ -53,6 +53,10 @@ contract Youfundr {
     function allProjects() external view returns (Project[] memory) {
         return projects;
     }
+
+    receive() external payable {}
+
+    fallback() external payable {}
 }
 
 contract Project {
@@ -178,4 +182,8 @@ contract Project {
         goal = amountNeeded;
         donator = (donations[msg.sender] > 0 ? true : false);
     }
+
+    receive() external payable {}
+
+    fallback() external payable {}
 }
