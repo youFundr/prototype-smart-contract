@@ -15,7 +15,10 @@ contract Youfundr {
         string fundName,
         string fundDescription,
         uint256 deadline,
-        uint256 goal
+        uint256 goal,
+        uint256 currentAmount,
+        function() external view returns (Project.State) state,
+        bool donator
     );
 
     function startFund(
@@ -40,7 +43,10 @@ contract Youfundr {
             name,
             description,
             deadlineTime,
-            amountNeeded
+            amountNeeded,
+            0,
+            newProject.state,
+            false
         );
     }
 
@@ -65,7 +71,7 @@ contract Project {
     uint public raiseBy;
     string public name;
     string public description;
-    State public state = State.Fundraising;
+    State public state;
 
     mapping(address => uint) public donations;
 
@@ -96,6 +102,7 @@ contract Project {
         amountNeeded = goal;
         raiseBy = fundRaisingDeadline;
         currentBalance = 0;
+        state = State.Fundraising;
     }
 
     function sendFunds() external payable inState(State.Fundraising) {
@@ -150,15 +157,18 @@ contract Project {
         public
         view
         returns (
+            address projectAddress,
             address payable fundStarter,
             string memory fundName,
             string memory fundDescription,
             uint256 deadline,
             State currentState,
             uint256 currentAmount,
-            uint256 goal
+            uint256 goal,
+            bool donator
         )
     {
+        projectAddress = address(this);
         fundStarter = founder;
         fundName = name;
         fundDescription = description;
@@ -166,5 +176,6 @@ contract Project {
         currentState = state;
         currentAmount = currentBalance;
         goal = amountNeeded;
+        donator = (donations[msg.sender] > 0 ? true : false);
     }
 }
