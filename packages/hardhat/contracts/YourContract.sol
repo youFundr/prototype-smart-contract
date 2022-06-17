@@ -24,15 +24,14 @@ contract Youfundr {
     function startFund(
         string calldata name,
         string calldata description,
-        uint duration,
+        uint deadline,
         uint amountNeeded
     ) external {
-        uint deadlineTime = block.timestamp.add(duration.mul(1 days));
         Project newProject = new Project(
             payable(msg.sender),
             name,
             description,
-            deadlineTime,
+            deadline,
             amountNeeded
         );
         projects.push(newProject);
@@ -42,7 +41,7 @@ contract Youfundr {
             msg.sender,
             name,
             description,
-            deadlineTime,
+            deadline,
             amountNeeded,
             0,
             newProject.state(),
